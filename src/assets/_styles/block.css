@@ -1,0 +1,64 @@
+.summary {
+	&, a, a:visited {
+		color: gray;
+	}
+
+	a:hover {
+		color: #111;
+	}
+}
+
+.back-bar {
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.buttons {
+	display: flex;
+	column-gap: .5rem;
+
+	&.right {
+		margin-left: auto;
+	}
+
+	button, .button {
+		width: 1.2rem;
+		height: 1.2rem;
+		background: none;
+		border: 0;
+		cursor: pointer;
+		display: inline-block;
+		padding: 0;
+
+		img {
+			opacity: .5;
+			transition: 300ms;
+		}
+
+		&:hover img {
+			opacity: 1;
+		}
+	}
+}
+
+.following {
+	position: fixed;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	text-align: right;
+
+	a {
+		background: #ededed;
+		padding: 0.3rem;
+		font-size: .7rem;
+		border-top-left-radius: 8px;
+		border-top-right-radius: 8px;
+		text-decoration: none;
+		transition: 300ms;
+
+		&:hover {
+			background: #ccc;
+		}
+	}
+}

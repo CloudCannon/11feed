@@ -1,0 +1,44 @@
+html {
+	font-family: sans-serif;
+	font-size: 137.5%;
+	-webkit-font-smoothing: antialiased;
+
+h1, h2, h3, h4, h5, h6 {
+	margin-top: 1.5rem;
+	margin-bottom: 0;
+	line-height: 1.5rem;
+
+	& + p, & + ul, & + ol, & + blockquote, & + table {
+		margin-top: .5rem;
+	}
+}
+
+h1, .u-step-1 {
+	font-size: 2.027rem;
+	line-height: 2.2rem;
+}
+
+h2, .u-step-2 {
+	font-size: 1.802rem;
+	line-height: 2rem;
+}
+
+h3, .u-step-3 {
+	font-size: 1.602rem;
+	line-height: 1.8rem;
+}
+
+h4, .u-step-4 {
+	font-size: 1.424rem;
+	line-height: 1.6rem;
+}
+
+h5, .u-step-5 {
+	font-size: 1.266rem;
+	line-height: 1.4rem;
+}
+
+h6, .u-step-6 {
+	font-size: 1.125rem;
+	line-height: 1.2rem;
+}

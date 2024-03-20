@@ -1,0 +1,13 @@
+.wrapper {
+	margin-inline: auto;
+	padding-inline: 1rem;
+	max-width: 35rem;
+}
+
+.mb-0 {
+	margin-bottom: 0;
+}
+
+.mt-0 {
+	margin-top: 0;
+}

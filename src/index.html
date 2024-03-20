@@ -1,0 +1,24 @@
+---
+layout: base.html
+---
+{% include "header.html" %}
+<main>
+	{% for num in (1..20) %}
+		<article>
+			<h2 class="u-step-5">
+				<a href="/post/">11ty {{ num }}.0 release: What's New and Exciting</a>
+			</h2>
+			<div class="summary">
+				<a href="">11ty.dev</a>
+				·
+				<time>2024-03-14</time>
+			</div>
+		</article>
+	{% endfor %}
+</main>
+
+<div class="following">
+	<div class="wrapper">
+		<a href="/feeds/">Following 34 feeds</a>
+	</div>
+</div>

@@ -1,0 +1,17 @@
+---
+layout: base.html
+---
+{% include "_back-nav.html" %}
+
+<main>
+    <ul>
+        {% for feed in feeds.all %}
+            <li>
+                <a href="{{ feed.url }}">
+                    <h2>{{ feed.title }}</h2>
+                    <p>{{ feed.description }}</p>
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+</main>

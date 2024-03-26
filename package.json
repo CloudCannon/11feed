@@ -10,6 +10,13 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@11ty/eleventy": "^2.0.1"
+    "@11ty/eleventy": "3.0.0-alpha.5"
+  },
+  "dependencies": {
+    "@11ty/eleventy-fetch": "^4.0.1",
+    "@joplin/turndown": "^4.0.73",
+    "@joplin/turndown-plugin-gfm": "^1.0.55",
+    "eleventy-plugin-svg-contents": "^0.7.0",
+    "rss-parser": "^3.13.0"
   }
 }

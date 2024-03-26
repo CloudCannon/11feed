@@ -1,24 +1,18 @@
 ---
 layout: base.html
 ---
-{% include "header.html" %}
+{% include "_header.html" %}
 <main>
-	{% for num in (1..20) %}
+	{% for post in collections.posts %}
 		<article>
 			<h2 class="u-step-5">
-				<a href="/post/">11ty {{ num }}.0 release: What's New and Exciting</a>
+				<a href="{{ post.url }}">{{ post.data.title }}</a>
 			</h2>
 			<div class="summary">
-				<a href="">11ty.dev</a>
+				<a href="{{ post.data.feedURL }}">{{ post.data.feedTitle }}</a>
 				·
-				<time>2024-03-14</time>
+				<time>{{ post.data.date | date: "%Y-%m-%d" }}</time>
 			</div>
 		</article>
 	{% endfor %}
 </main>
-
-<div class="following">
-	<div class="wrapper">
-		<a href="/feeds/">Following 34 feeds</a>
-	</div>
-</div>

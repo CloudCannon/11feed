@@ -1,0 +1,20 @@
+---
+layout: base.html
+---
+{% include "_back-nav.html" %}
+<link href="/pagefind/pagefind-ui.css" rel="stylesheet">
+<script src="/pagefind/pagefind-ui.js"></script>
+
+<div class="wrapper">
+    <main>
+        <h2>Search</h2>
+        <p class="description">Enter your search term below:</p>
+        <div id="search" class="search-box"></div>
+    </main>
+</div>
+
+<script>
+    window.addEventListener('DOMContentLoaded', (event) => {
+        new PagefindUI({ element: "#search", showSubResults: true });
+    });
+</script>

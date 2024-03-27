@@ -40,9 +40,9 @@ toggleDarkMode(localStorage.getItem("dark-mode") == "true");
 useDark.addListener((evt) => toggleDarkMode(evt.matches));
 
 InstantClick.on('change', function() {
-  const button = document.querySelector(".toggle-color-scheme");
+  const colorSchemeButton = document.querySelector(".toggle-color-scheme");
   // Toggles the "dark-mode" class on click and sets localStorage state
-  button.addEventListener("click", () => {
+  colorSchemeButton.addEventListener("click", () => {
     darkModeState = !darkModeState;
 
     toggleDarkMode(darkModeState);

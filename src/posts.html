@@ -28,8 +28,6 @@
 				});
 			});
 
-			console.log(posts);
-
 			return posts.sort(function(a, b) {
 				return b.date - a.date;
 			});
@@ -59,7 +57,7 @@
 </div>
 
 <div class="wrapper">
-<main>
+	<main data-pagefind-body>
 		{% if post.content %}
 			{{ post.content | markdownify }}
 		{% else %}

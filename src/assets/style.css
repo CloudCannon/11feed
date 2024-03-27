@@ -20,6 +20,11 @@ html.dark-mode {
 	--highlight: gray;
 	--hard-highlight: lightgray;
 	--table-row-highlight: #111;
+	--pagefind-ui-primary: #eeeeee;
+	--pagefind-ui-text: #eeeeee;
+	--pagefind-ui-background: #152028;
+	--pagefind-ui-border: #152028;
+	--pagefind-ui-tag: #152028;
 
 	.toggle-color-scheme svg {
 		fill: var(--primary-color);
@@ -291,6 +296,7 @@ a {
 /* 
 	Components
 */
+
 .main {
 	.summary {
 		margin-top: .5rem;
@@ -333,8 +339,16 @@ a {
 	font-style: italic;
 }
 
+.description {
+	font-style: italic;
+	font-size: .8rem;
+	line-height: 1rem;
+	color: var(--highlight);
+}
+
 .summary {
 	display: flex;
+	flex-wrap: wrap;
 	&, a, a:visited {
 		color: var(--highlight);
 	}
@@ -399,6 +413,10 @@ a {
 			}
 		}
 	}
+}
+
+.search-box {
+	margin-top: 1rem;
 }
 
 .following {

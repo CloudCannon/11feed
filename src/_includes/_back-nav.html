@@ -1,18 +1,15 @@
 <div class="wrapper  sticky">
 	<div class="back-bar">
 		<div class="buttons">
-				<a class="button" href="/">
-					{{ '/src/_svgs/left-arrow.svg' | svgContents }}
-				</a>
+			<a class="button" href="/">
+				{{ '/src/_svgs/left-arrow.svg' | svgContents }}
+			</a>
 		</div>
 
 		<div class="buttons right">
-			<button class="toggle-iframe">
-				{{ '/src/_svgs/view.svg' | svgContents }}
-			</button>
-			<button>
+			<a class="button" href="/search/" data-no-instant>
 				{{ '/src/_svgs/search.svg' | svgContents }}
-			</button>
+			</a>
 			<button class="toggle-color-scheme">
 				{{ '/src/_svgs/dark-mode.svg' | svgContents }}
 			</button>

@@ -1,5 +1,7 @@
 const markdownIt = require("markdown-it");
 const svgContents = require("eleventy-plugin-svg-contents");
+const util = require("node:util");
+const exec = util.promisify(require("node:child_process").exec);
 
 module.exports = function(eleventyConfig) {
 	const md = new markdownIt({
@@ -11,6 +13,10 @@ module.exports = function(eleventyConfig) {
 	eleventyConfig.addPlugin(svgContents);
 	eleventyConfig.addFilter("markdownify", (content) => {
 		return md.render(content);
+	});
+
+	eleventyConfig.on("eleventy.after", async ({ dir }) => {
+		await exec(`npx pagefind --site=${dir.output} --output-subdir=./pagefind`);
 	});
 
 	return {

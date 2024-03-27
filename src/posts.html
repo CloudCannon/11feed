@@ -14,6 +14,7 @@
 						date: new Date(item.date),
 						content: item.content,
 						link: item.link,
+						author: item.author,
 						feed: {
 							title: feed.title,
 							url: feed.url,
@@ -39,6 +40,7 @@
 	layout: "base.html",
 	eleventyComputed: {
 		title: "{{ post.title }}",
+		author: "{{ post.author }}",
 		link: "{{ post.link }}",
 		feedURL: "{{ post.feed.url }}",
 		feedId: "{{ post.feed.id }}",
@@ -51,13 +53,7 @@
 {% include "_back-nav.html" %}
 <header>
 	<h1><a href="{{ link }}">{{ title }}</a></h1>
-	<div class="summary">
-		<a href="{{ post.feed.url }}">{{ post.feed.title }}</a>
-		·
-		<span>By {{ post.feed.author }}</span>
-		·
-		<time>{{ post.date | date: "%Y-%m-%d" }}</time>
-	</div>
+	{% include "_summary.html", feedURL:post.feed.url feedTitle:post.feed.title date:post.date author:post.author %}
 </header>
 
 <main>

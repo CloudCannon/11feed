@@ -73,23 +73,35 @@ const parseFeed = async (url, category) => {
 	});
 
 	let feed = await new RssParser().parseString(rawFeed);
-
 	let feedId = new URL(url).hostname.replace('www.','');
 
 	return {
-		title: safeString(feed.title),
-		description: safeString(feed.description),
-		link: stripHTML(feed.link),
-		author: safeString(feed.author),
+		title: safeString(feed.title) || null,
+		description: safeString(feed.description) || null,
+		link: stripHTML(feed.link) || null,
+		author: safeString(feed.author)|| null,
 		url: url,
 		id: feedId,
 		categories: [category],
 		items: feed.items.map((item) => {
+			let postAuthor = safeString(item.author || feed.author) || null;
+			if (postAuthor) {
+				postAuthor = postAuthor.replace("hello@smashingmagazine.com", "")
+				postAuthor = postAuthor.trim();
+				if (postAuthor.charAt(0) == "(") {
+					postAuthor = postAuthor.slice(1);
+				}
+
+				if (postAuthor.charAt(postAuthor.length-1) == ")") {
+					postAuthor = postAuthor.substring(0, postAuthor.length - 1);
+				}
+			}
 			return {
-				title: safeString(item.title),
-				date: new Date(item.pubDate),
-				content: safeContent(item['content:encoded'] || item.content || item.description),
-				link: item.link
+				title: safeString(item.title) || null,
+				date: new Date(item.pubDate) || null,
+				content: safeContent(item['content:encoded'] || item.content || item.description) || null,
+				link: item.link || null,
+				author: postAuthor
 			};
 		})
 	};

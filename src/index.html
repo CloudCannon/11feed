@@ -8,11 +8,7 @@ layout: base.html
 			<h2 class="u-step-5">
 				<a href="{{ post.url }}">{{ post.data.title }}</a>
 			</h2>
-			<div class="summary">
-				<a href="{{ post.data.feedURL }}">{{ post.data.feedTitle }}</a>
-				·
-				<time>{{ post.data.date | date: "%Y-%m-%d" }}</time>
-			</div>
+			{% include "_summary.html", feedURL:post.data.feedURL feedTitle:post.data.feedTitle date:post.data.date %}
 		</article>
 	{% endfor %}
 </main>

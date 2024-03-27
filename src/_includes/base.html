@@ -10,6 +10,7 @@
   <body class="wrapper">
     {{ content }}
     {% include "_feed-button.html" %}
-    <script src="/assets/script.js"></script>
+    <script data-no-instant src="/assets/script.js"></script>
+    <script data-no-instant>InstantClick.init();</script>
   </body>
 </html>

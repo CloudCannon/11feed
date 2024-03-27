@@ -1,0 +1,9 @@
+<div class="summary">
+	<a href="{{ feedURL }}" target="_blank" class="text-wrapper">{{ feedTitle }}</a>
+	·
+	<time>{{ date | date: "%Y-%m-%d" }}</time>
+</div>
+
+{% if author and author != "" %}
+	<div class="author text-wrapper">By {{ author }}</div>
+{% endif %}

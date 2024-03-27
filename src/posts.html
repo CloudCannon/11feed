@@ -51,15 +51,19 @@
 }
 ---
 {% include "_back-nav.html" %}
-<header>
-	<h1><a href="{{ link }}">{{ title }}</a></h1>
-	{% include "_summary.html", feedURL:post.feed.url feedTitle:post.feed.title date:post.date author:post.author %}
-</header>
+<div class="wrapper">
+	<header>
+		<h1><a href="{{ link }}">{{ title }}</a></h1>
+		{% include "_summary.html", feedURL:post.feed.url feedTitle:post.feed.title date:post.date author:post.author %}
+	</header>
+</div>
 
+<div class="wrapper">
 <main>
-	{% if post.content %}
-		{{ post.content | markdownify }}
-	{% else %}
-		<p><em>No content found</em></p>
-	{% endif %}
-</main>
+		{% if post.content %}
+			{{ post.content | markdownify }}
+		{% else %}
+			<p><em>No content found</em></p>
+		{% endif %}
+	</main>
+</div>

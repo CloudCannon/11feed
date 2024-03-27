@@ -73,6 +73,7 @@ ol[role='list'] {
 body {
   min-height: 100vh;
   line-height: 1.5;
+  margin: 0;
 }
 
 /* Set shorter line heights on headings and interactive elements */
@@ -199,46 +200,6 @@ svg {
 	stroke: var(--primary-color);
 }
 
-body > header {
-	background: var(--bg-color);
-
-	.summary {
-		margin-top: .5rem;
-	}
-
-	.logo {
-		margin: 0 2rem 0 0;
-	}
-
-	nav ul {
-		padding: 0;
-		margin: 0;
-		list-style: none;
-		display: flex;
-		column-gap: .5rem;
-		flex-wrap: wrap;
-
-		li {
-			margin: 0;
-		}
-
-		a.active, a.active:visited {
-			color: var(--primary-color);
-			font-weight: bold;
-			text-decoration-color: var(--nav-current-page-highlight);
-		}
-
-		a, a:visited {
-			color: grey;
-			text-decoration-thickness: .2ex;
-
-			&:hover {
-				color: var(--primary-color);
-			}
-		}
-	}
-}
-
 /* 
 	Typography
 */
@@ -320,9 +281,53 @@ a {
 	max-width: 25ch;
 }
 
+.sticky {
+	position: sticky;
+	top: 0;
+	z-index: 1;
+	background: var(--bg-color);
+}
+
 /* 
 	Components
 */
+.main {
+	.summary {
+		margin-top: .5rem;
+	}
+
+	.logo {
+		margin: 0 2rem 0 0;
+	}
+
+	nav ul {
+		padding: 0;
+		margin: 0;
+		list-style: none;
+		display: flex;
+		column-gap: .5rem;
+		flex-wrap: wrap;
+
+		li {
+			margin: 0;
+		}
+
+		a.active, a.active:visited {
+			color: var(--primary-color);
+			font-weight: bold;
+			text-decoration-color: var(--nav-current-page-highlight);
+		}
+
+		a, a:visited {
+			color: grey;
+			text-decoration-thickness: .2ex;
+
+			&:hover {
+				color: var(--primary-color);
+			}
+		}
+	}
+}
 
 .author {
 	font-style: italic;
@@ -354,10 +359,8 @@ a {
 }
 
 .back-bar, header.main {
-	position: sticky;
-	top: 0;
 	padding: 0.5rem 0;
-	background: var(--bg-color);
+	
 	border-bottom: 1px dotted var(--highlight);
 	z-index: 1;
 }

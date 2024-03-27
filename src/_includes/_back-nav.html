@@ -1,16 +1,21 @@
-<div class="back-bar">
-	<div class="buttons">
-			<a class="button" href="/">
-				{{ '/src/_svgs/left-arrow.svg' | svgContents }}
-			</a>
-	</div>
+<div class="wrapper  sticky">
+	<div class="back-bar">
+		<div class="buttons">
+				<a class="button" href="/">
+					{{ '/src/_svgs/left-arrow.svg' | svgContents }}
+				</a>
+		</div>
 
-	<div class="buttons right">
-		<button>
-			{{ '/src/_svgs/search.svg' | svgContents }}
-		</button>
-		<button class="toggle-color-scheme">
-			{{ '/src/_svgs/dark-mode.svg' | svgContents }}
-		</button>
+		<div class="buttons right">
+			<button class="toggle-iframe">
+				{{ '/src/_svgs/view.svg' | svgContents }}
+			</button>
+			<button>
+				{{ '/src/_svgs/search.svg' | svgContents }}
+			</button>
+			<button class="toggle-color-scheme">
+				{{ '/src/_svgs/dark-mode.svg' | svgContents }}
+			</button>
+		</div>
 	</div>
 </div>

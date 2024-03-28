@@ -415,6 +415,11 @@ a {
 	}
 }
 
+iframe.contentIframe {
+	width: 1px;
+	min-width: 100%;
+}
+
 .search-box {
 	margin-top: 1rem;
 }

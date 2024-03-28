@@ -43,7 +43,7 @@ const safeString = (v) => {
 }
 
 const safeContent = (v) => {
-	turndownService.remove(['script', 'noscript', 'style', 'head', 'button']);
+	turndownService.remove(['script', 'noscript', 'style', 'head', 'button', 'iframe']);
 	return turndownService.turndown(v);
 }
 
@@ -65,6 +65,21 @@ const getSources = async () => {
 	return feeds;
 };
 
+const filterAuthor = (s) => {
+	if (s) {
+		s = s.replace("hello@smashingmagazine.com", "")
+		s = s.trim();
+		if (s.charAt(0) == "(") {
+			s = s.slice(1);
+		}
+
+		if (s.charAt(s.length-1) == ")") {
+			s = s.substring(0, s.length - 1);
+		}
+	}
+	return s;
+}
+
 const parseFeed = async (url, category) => {
 
 	let rawFeed = await EleventyFetch(url, {
@@ -84,24 +99,12 @@ const parseFeed = async (url, category) => {
 		id: feedId,
 		categories: [category],
 		items: feed.items.map((item) => {
-			let postAuthor = safeString(item.author || feed.author) || null;
-			if (postAuthor) {
-				postAuthor = postAuthor.replace("hello@smashingmagazine.com", "")
-				postAuthor = postAuthor.trim();
-				if (postAuthor.charAt(0) == "(") {
-					postAuthor = postAuthor.slice(1);
-				}
-
-				if (postAuthor.charAt(postAuthor.length-1) == ")") {
-					postAuthor = postAuthor.substring(0, postAuthor.length - 1);
-				}
-			}
 			return {
 				title: safeString(item.title) || null,
 				date: new Date(item.pubDate) || null,
 				content: safeContent(item['content:encoded'] || item.content || item.description) || null,
 				link: item.link || null,
-				author: postAuthor
+				author: filterAuthor(safeString(item.author || feed.author)) || null
 			};
 		})
 	};

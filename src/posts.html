@@ -58,10 +58,19 @@
 
 <div class="wrapper">
 	<main data-pagefind-body>
-		{% if post.content %}
-			{{ post.content | markdownify }}
-		{% else %}
-			<p><em>No content found</em></p>
-		{% endif %}
+		<iframe scrolling="no" id="contentIframe" sandbox="allow-scripts allow-top-navigation-by-user-activation" class="contentIframe" width="100%" frameborder="0"></iframe>
 	</main>
 </div>
+<script type="text/javascript" src="/assets/iframe-resizer.js"></script>
+<script>
+	function rerenderIframe() {
+		let postContent = {{ post.content | markdownify | json }};
+		setiFrameContent(postContent, document.getElementsByTagName('html')[0].classList.contains('dark-mode'), 'contentIframe');
+	}
+
+	document.documentElement.addEventListener("trigger-color-scheme", function() {
+		rerenderIframe();
+	}, false);
+
+	rerenderIframe();
+</script>

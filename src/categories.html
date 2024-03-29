@@ -1,0 +1,31 @@
+---js
+{
+	pagination: {
+		data: "collections.feedCategories",
+		size: 1,
+		alias: "category",
+		addAllPagesToCollections: true
+	},
+	permalink: "/categories/{{ category.name | slug }}/",
+	tags: "categories",
+	layout: "base.html",
+	eleventyComputed: {
+		name: (data) => data.category.name,
+	}
+}
+---
+{% include "_header.html" %}
+<div class="wrapper">
+	<main>
+		{% assign c = "category_" | append: name | downcase %}
+		{% for post in collections[c] %}
+			<article>
+				{{ post.leng}}
+				<h3 class="u-step-5">
+					<a href="{{ post.url }}">{{ post.data.title }}</a>
+				</h3>
+				{% include "_summary.html", feedId:post.data.feedId feedTitle:post.data.feedTitle date:post.data.date %}
+			</article>
+		{% endfor %}
+	</main>
+</div>

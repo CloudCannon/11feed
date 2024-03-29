@@ -320,7 +320,6 @@ a {
 
 		a.active, a.active:visited {
 			color: var(--primary-color);
-			font-weight: bold;
 			text-decoration-color: var(--nav-current-page-highlight);
 		}
 

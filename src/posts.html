@@ -1,58 +1,31 @@
 ---js
 {
 	pagination: {
-		data: "feeds.all",
+		data: "collections.feedPosts",
 		size: 1,
 		alias: "post",
-		addAllPagesToCollections: true,
-		before: function(data) {
-			let posts = [];
-			data.forEach(function(feed) {
-				feed.items.forEach(function(item) {
-					posts.push({
-						title: item.title,
-						date: new Date(item.date),
-						content: item.content,
-						link: item.link,
-						author: item.author,
-						feed: {
-							title: feed.title,
-							url: feed.url,
-							description: feed.description,
-							author: feed.author,
-							url: feed.url,
-							id: feed.id,
-							categories: feed.categories
-						}
-					});
-				});
-			});
-
-			return posts.sort(function(a, b) {
-				return b.date - a.date;
-			});
-		}
+		addAllPagesToCollections: true
 	},
 	permalink: "/posts/{{ post.link | slug }}/",
 	tags: "posts",
 	layout: "base.html",
 	eleventyComputed: {
-		title: "{{ post.title }}",
-		author: "{{ post.author }}",
-		link: "{{ post.link }}",
-		feedURL: "{{ post.feed.url }}",
-		feedId: "{{ post.feed.id }}",
-		feedTitle: "{{ post.feed.title }}",
-		date: "{{ post.date }}",
-		categories: "{{ post.feed.categories }}"
+		title: (data) => data.post.title,
+		author: (data) => data.post.author,
+		link: (data) => data.post.link,
+		feedURL: (data) => data.post.feed.url,
+		feedId: (data) => data.post.feed.id,
+		feedTitle: (data) => data.post.feed.title,
+		date: (data) => data.post.date,
+		categories: (data) => data.post.feed.categories
 	}
 }
 ---
 {% include "_back-nav.html" %}
 <div class="wrapper">
 	<header>
-		<h1><a href="{{ link }}">{{ title }}</a></h1>
-		{% include "_summary.html", feedURL:post.feed.url feedTitle:post.feed.title date:post.date author:post.author %}
+		<h1><a href="{{ link }}">{{ post.title }}</a></h1>
+		{% include "_summary.html", feedId:post.feed.id feedTitle:post.feed.title date:post.date author:post.author %}
 	</header>
 </div>
 

@@ -3,49 +3,32 @@ const RssParser = require('rss-parser');
 const EleventyFetch = require("@11ty/eleventy-fetch");
 const fastglob = require("fast-glob");
 const fs = require("fs");
-const dateLimit = require("./dateLimit.js");
 const TurndownService = require('@joplin/turndown');
-const turndownPluginGfm = require('@joplin/turndown-plugin-gfm')
-
-// https://github.com/harttle/liquidjs/blob/306b07050726c9f07d4325850a3efc7215c38406/src/filters/html.ts#L3C1-L9C2
-const escapeMap = {
-	'&': '&amp;',
-	'<': '&lt;',
-	'>': '&gt;',
-	'"': '&#34;',
-	"'": '&#39;'
-}
+const turndownPluginGfm = require('@joplin/turndown-plugin-gfm');
+const createDOMPurify = require('dompurify');
+const { JSDOM } = require('jsdom');
+const sanitizeUrl = require("@braintree/sanitize-url").sanitizeUrl;
+var htmlEscaper = require('html-escaper');
 
 const turndownService = new TurndownService();
 turndownService.use(turndownPluginGfm.gfm);
 
-const stripHTML = (v) => {
-	if (v) {
-		// https://github.com/harttle/liquidjs/blob/306b07050726c9f07d4325850a3efc7215c38406/src/filters/html.ts#L33
-		return String(v).replace(/<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>|<.*?>|<!--[\s\S]*?-->/g, '');
-	} else {
-		return v;
-	}
-};
+const window = new JSDOM('').window;
+const DOMPurify = createDOMPurify(window);
 
-
-const escape = (v) => {
-	if (v) {
-		// https://github.com/harttle/liquidjs/blob/306b07050726c9f07d4325850a3efc7215c38406/src/filters/html.ts#L18
-		return String(v).replace(/&|<|>|"|'/g, m => escapeMap[m])
-	} else {	
-		return v;
-	}
+const safeContent = (v) => {
+	let sanitize = DOMPurify.sanitize(v);
+	turndownService.remove(['script', 'noscript', 'style', 'head', 'button']);
+	return turndownService.turndown(v);
 };
 
 const safeString = (v) => {
-	return escape(stripHTML(v));
-}
-
-const safeContent = (v) => {
-	turndownService.remove(['script', 'noscript', 'style', 'head', 'button', 'iframe']);
-	return turndownService.turndown(v);
-}
+	if (v == null || v == undefined) {
+		return null;
+	} else {
+		return htmlEscaper.escape(v)
+	}
+};
 
 const getSources = async () => {
 	// Create a "glob" of all feed json files
@@ -91,20 +74,20 @@ const parseFeed = async (url, category) => {
 	let feedId = new URL(url).hostname.replace('www.','');
 
 	return {
-		title: safeString(feed.title) || null,
-		description: safeString(feed.description) || null,
-		link: stripHTML(feed.link) || null,
-		author: safeString(feed.author)|| null,
+		title: safeString(feed.title),
+		description: safeString(feed.description),
+		link: sanitizeUrl(feed.link),
+		author: safeString(feed.author),
 		url: url,
 		id: feedId,
 		categories: [category],
 		items: feed.items.map((item) => {
 			return {
-				title: safeString(item.title) || null,
-				date: new Date(item.pubDate) || null,
-				content: safeContent(item['content:encoded'] || item.content || item.description) || null,
-				link: item.link || null,
-				author: filterAuthor(safeString(item.author || feed.author)) || null
+				title: safeString(item.title),
+				date: new Date(item.pubDate),
+				content: safeContent(item['content:encoded'] || item.content || item.description),
+				link: sanitizeUrl(item.link),
+				author: filterAuthor(safeString(item.author || feed.author))
 			};
 		})
 	};

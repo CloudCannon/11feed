@@ -6,15 +6,21 @@ layout: base.html
 <div class="wrapper">
 	<main>
 		<h2>My Feeds </h2>
-		{% for feed in collections.feedsList %}
-			<article>
-				<h3 class="u-step-5">
-					<a href="/feeds/{{ feed.id }}">
-						{{ feed.title }}
-					</a>
-				</h3>
-				<p class="description">{{ feed.description }}</p>
-			</article>
+		<p><a href="/feeds-list/opml-export.xml">Download OPML export</a></p>
+		{% for category in collections.categorizedFeedsList %}
+			<h3>{{ category[0] }}</h3>
+			<ul>
+			{% for feed in category[1] %}
+				<li><a href="/feeds/{{ feed.id }}">{{ feed.title }}</a> - 
+					<em>
+						<a href="{{ feed.url}}">Raw Feed</a> 
+						{% if feed.link %}
+							<a href="{{ feed.link }}">Live Site</a>
+						{% endif %}
+					</em>
+				</li>
+			{% endfor %}
+			</ul>
 		{% endfor %}
 	</main>
 </div>

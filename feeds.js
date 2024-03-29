@@ -8,29 +8,50 @@ const turndownPluginGfm = require('@joplin/turndown-plugin-gfm');
 const createDOMPurify = require('dompurify');
 const { JSDOM } = require('jsdom');
 const sanitizeUrl = require("@braintree/sanitize-url").sanitizeUrl;
-var htmlEscaper = require('html-escaper');
+const htmlEscaper = require('html-escaper');
+const { XMLParser } = require("fast-xml-parser");
 
 const turndownService = new TurndownService();
 turndownService.use(turndownPluginGfm.gfm);
 
 const window = new JSDOM('').window;
 const DOMPurify = createDOMPurify(window);
+const xmlParser = new XMLParser({
+	ignoreAttributes : false
+});
+
+const d = new Date();
+d.setDate(d.getDate() - 120);
+const dateLimit = new Date(d).getTime();
 
 const safeContent = (v) => {
-	let sanitize = DOMPurify.sanitize(v);
-	turndownService.remove(['script', 'noscript', 'style', 'head', 'button']);
-	return turndownService.turndown(v);
+	try {
+		if (v === null || v === undefined) {
+			return "";
+		}
+		let sanitize = DOMPurify.sanitize(v);
+		turndownService.remove(['script', 'noscript', 'style', 'head', 'button']);
+		return turndownService.turndown(v);
+	} catch(error) {
+		console.error(`Could not parse ${v}`)
+	}
 };
 
 const safeString = (v) => {
-	if (v == null || v == undefined) {
+	if (v === null || v === undefined) {
 		return null;
 	} else {
-		return htmlEscaper.escape(v)
+		try {
+			return htmlEscaper.escape(v)
+		} catch(error) {
+			console.error(`Could not parse ${v}`);
+			return "";
+		}
 	}
 };
 
 const getSources = async () => {
+	console.log("Downloading RSS feeds...")
 	// Create a "glob" of all feed json files
 	const feedFiles = await fastglob(
 		"./src/feeds/*.json", 
@@ -44,9 +65,87 @@ const getSources = async () => {
 		feeds.push(feedData);
 	}
 
-	// Return the feeds Set of objects within an array
-	return feeds;
+	const opmlFiles = await fastglob(
+		"./src/feeds/*.xml", 
+		{ caseSensitiveMatch: false }
+	);
+
+	for (let feed of opmlFiles) {
+		let file = fs.readFileSync(feed);
+		let outlines = xmlParser.parse(file)['opml']['body']['outline'];
+		if (Array.isArray(outlines)) {
+			let category = 'misc';
+			for (let outline of outlines) {
+				let categoryFeeds = [];
+				category = 'misc';
+				
+
+				// check if it's a single outline
+				if (outline['@_xmlUrl']) {
+					feeds.push({
+						category: category,
+						feeds: categoryFeeds
+					})
+				// Check if it's a nested outline
+				} else if (outline.outline) {
+					const nestedOutlines = outline.outline;
+
+					if (outline['@_text']) {
+						category = outline['@_text'];
+					}
+					if (Array.isArray(nestedOutlines)) {
+						nestedOutlines.forEach(nestedOutline => {
+							if (nestedOutline['@_xmlUrl']) {
+								categoryFeeds.push(nestedOutline['@_xmlUrl']);
+							}
+						});
+					} else {
+						if (nestedOutlines['@_xmlUrl']) {
+							categoryFeeds.push(nestedOutlines['@_xmlUrl']);
+						}
+					}
+				}
+				feeds.push({
+					category: category,
+					items: categoryFeeds
+				})
+			}
+		} else {
+			if (outlines['@_xmlUrl']) {
+				feeds.push({
+					category: category,
+					items: [outlines['@_xmlUrl']]
+				})
+			}
+		}
+	}
+
+	let deduplicatedFeeds = {};
+
+	feeds.forEach(feedList => {
+		const category = feedList['category'];
+		
+		const existingCategory = deduplicatedFeeds['category'] === category;
+		if (category in deduplicatedFeeds) {
+			deduplicatedFeeds[category] = [...new Set([...deduplicatedFeeds[category], ...feedList['items']])];
+		} else {
+			deduplicatedFeeds[category] = feedList['items'];
+		}
+	});
+
+	let returnData = [];
+
+	Object.keys(deduplicatedFeeds).forEach(key => {
+		returnData.push({
+			category: key,
+			items: deduplicatedFeeds[key]
+		});
+	});
+
+	return returnData;
 };
+
+
 
 const filterAuthor = (s) => {
 	if (s) {
@@ -70,8 +169,9 @@ const parseFeed = async (url, category) => {
 		type: "text"
 	});
 
+
 	let feed = await new RssParser().parseString(rawFeed);
-	let feedId = new URL(url).hostname.replace('www.','');
+	let feedId = url;
 
 	return {
 		title: safeString(feed.title),
@@ -81,7 +181,10 @@ const parseFeed = async (url, category) => {
 		url: url,
 		id: feedId,
 		categories: [category],
-		items: feed.items.map((item) => {
+		items: feed.items.filter((item) => {
+			let date = new Date(item.pubDate);
+			return date > dateLimit;
+		}).map((item) => {
 			return {
 				title: safeString(item.title),
 				date: new Date(item.pubDate),
@@ -102,11 +205,17 @@ module.exports = async () => {
 		let category = categorySource.category;
 		categories.push(category);
 		for (const feed of categorySource.items) {
-			const feedData = await parseFeed(feed, category);
-			if (!feeds[feedData.url]) {
-				feeds[feedData.url] = feedData;
-			} else {
-				feeds[feedData.url].categories.push(category);
+			try {
+				if (!feeds[feed]) {
+					console.log(feed);
+					feeds[feed] = await parseFeed(feed, category);
+				} else {
+					console.log("*** NOT ***");
+					console.log(feed);
+					feeds[feed].categories.push(category);
+				}
+			} catch (error) {
+				console.error(`Could not reach ${feed}`)
 			}
 		}
 	}

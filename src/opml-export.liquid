@@ -1,0 +1,20 @@
+---
+permalink: /feeds-list/opml-export.xml
+eleventyExcludeFromCollections: true
+---
+<?xml version="1.0" encoding="UTF-8"?>
+<opml version="1.0">
+	<head>
+		<title>My 11feed export</title>
+		<dateCreated>{{ helpers.currentDate }}</dateCreated>
+	</head>
+	<body>
+		{% for category in collections.categorizedFeedsList %}
+			<outline text="{{ category[0] }}">
+				{% for feed in category[1] %}
+					<outline text="{{ feed.title }}" type="rss" xmlUrl="{{ feed.url }}" htmlUrl="{{ feed.link }}"/>
+				{% endfor %}
+			</outline>
+		{% endfor %}
+	</body>
+</opml>

@@ -37,6 +37,12 @@ window.addEventListener('load', () => {
     setDarkModeLocalStorage(darkModeState);
     document.documentElement.dispatchEvent(colorSchemeEvent);
   });
+
+  document.getElementById("back").addEventListener("click", (e) => {
+    if(document.referrer.indexOf(window.location.host) >= 0) {
+      history.back();
+    }
+  });
 });
 
 /* https://getquick.link/ */

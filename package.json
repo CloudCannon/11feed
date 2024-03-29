@@ -19,8 +19,10 @@
     "@joplin/turndown-plugin-gfm": "^1.0.55",
     "dompurify": "^3.0.11",
     "eleventy-plugin-svg-contents": "^0.7.0",
+    "fast-xml-parser": "^4.3.6",
     "html-escaper": "^2.0.2",
     "jsdom": "^24.0.0",
+    "opml": "^0.5.2",
     "rss-parser": "^3.13.0"
   }
 }

@@ -1,7 +1,7 @@
 <div class="summary">
-	<a href="/feeds/{{ feedId }}" target="_blank" class="text-wrapper">{{ feedTitle }}</a>
+	<time>{{ date | postDate }}</time>
 	·
-	<time>{{ date | date: "%Y-%m-%d" }}</time>
+	<a href="/feeds/{{ feedId }}" target="_blank" class="text-wrapper">{{ feedTitle }}</a>
 </div>
 
 {% if author and author != "" %}

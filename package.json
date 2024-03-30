@@ -22,7 +22,6 @@
     "fast-xml-parser": "^4.3.6",
     "html-escaper": "^2.0.2",
     "jsdom": "^24.0.0",
-    "opml": "^0.5.2",
     "rss-parser": "^3.13.0"
   }
 }

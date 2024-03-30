@@ -11,13 +11,16 @@ layout: base.html
 			<h3>{{ category[0] }}</h3>
 			<ul>
 			{% for feed in category[1] %}
-				<li><a href="/feeds/{{ feed.id }}">{{ feed.title }}</a> - 
-					<em>
-						<a href="{{ feed.url}}">Raw Feed</a> 
-						{% if feed.link %}
-							<a href="{{ feed.link }}">Live Site</a>
-						{% endif %}
-					</em>
+				<li><h4><a href="/feeds/{{ feed.id }}">{{ feed.title }}</a></h4> 
+					<p>
+						<em>
+							<a href="{{ feed.url}}">Raw Feed</a>
+							{% if feed.link %}
+								·
+								<a href="{{ feed.link }}">Website</a>
+							{% endif %}
+						</em>
+					</p>
 				</li>
 			{% endfor %}
 			</ul>

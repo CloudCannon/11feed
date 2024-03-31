@@ -10,6 +10,7 @@ const { JSDOM } = require('jsdom');
 const sanitizeUrl = require("@braintree/sanitize-url").sanitizeUrl;
 const htmlEscaper = require('html-escaper');
 const { XMLParser } = require("fast-xml-parser");
+const CategoryStore = require("./category-store.js");
 
 const turndownService = new TurndownService();
 turndownService.use(turndownPluginGfm.gfm);
@@ -52,6 +53,9 @@ const safeString = (v) => {
 
 const getSources = async () => {
 	console.log("Downloading RSS feeds...")
+
+	const categoryStore = new CategoryStore();
+
 	// Create a "glob" of all feed json files
 	const feedFiles = await fastglob(
 		"./src/feeds/*.json", 
@@ -59,10 +63,10 @@ const getSources = async () => {
 	);
 
 	// Loop through those files and add their content to our `feeds` Set
-	let feeds = [];
+	let feeds = {};
 	for (let feed of feedFiles) {
 		const feedData = JSON.parse(fs.readFileSync(feed));
-		feeds.push(feedData);
+		categoryStore.add(feedData.category, feedData.items);
 	}
 
 	const opmlFiles = await fastglob(
@@ -74,18 +78,14 @@ const getSources = async () => {
 		let file = fs.readFileSync(feed);
 		let outlines = xmlParser.parse(file)['opml']['body']['outline'];
 		if (Array.isArray(outlines)) {
-			let category = 'Misc';
 			for (let outline of outlines) {
 				let categoryFeeds = [];
-				category = 'Misc';
-				
+				let category = 'Misc';
 
 				// check if it's a single outline
 				if (outline['@_xmlUrl']) {
-					feeds.push({
-						category: category,
-						items: [outline['@_xmlUrl']]
-					})
+					categoryStore.add(category, outline['@_xmlUrl']);
+
 				// Check if it's a nested outline
 				} else if (outline.outline) {
 					const nestedOutlines = outline.outline;
@@ -96,54 +96,24 @@ const getSources = async () => {
 					if (Array.isArray(nestedOutlines)) {
 						nestedOutlines.forEach(nestedOutline => {
 							if (nestedOutline['@_xmlUrl']) {
-								categoryFeeds.push(nestedOutline['@_xmlUrl']);
+								categoryStore.add(category, nestedOutline['@_xmlUrl']);
 							}
 						});
 					} else {
 						if (nestedOutlines['@_xmlUrl']) {
-							categoryFeeds.push(nestedOutlines['@_xmlUrl']);
+							categoryStore.add(category, nestedOutlines['@_xmlUrl']);
 						}
 					}
 				}
-				feeds.push({
-					category: category,
-					items: categoryFeeds
-				})
 			}
 		} else {
 			if (outlines['@_xmlUrl']) {
-				feeds.push({
-					category: category,
-					items: [outlines['@_xmlUrl']]
-				})
+				categoryStore.add('Misc', outlines['@_xmlUrl']);
 			}
 		}
 	}
 
-	let deduplicatedFeeds = {};
-
-	feeds.forEach(feedList => {
-		const category = feedList['category'];
-		
-		const existingCategory = deduplicatedFeeds['category'] === category;
-		if (category in deduplicatedFeeds) {
-			deduplicatedFeeds[category] = [...new Set([...deduplicatedFeeds[category], ...feedList['items']])];
-		} else {
-			console.log(feedList['items']);
-			deduplicatedFeeds[category] = feedList['items'];
-		}
-	});
-
-	let returnData = [];
-
-	Object.keys(deduplicatedFeeds).forEach(key => {
-		returnData.push({
-			category: key,
-			items: deduplicatedFeeds[key]
-		});
-	});
-
-	return returnData;
+	return categoryStore;
 };
 
 
@@ -163,7 +133,7 @@ const filterAuthor = (s) => {
 	return s;
 }
 
-const parseFeed = async (url, category) => {
+const parseFeed = async (url) => {
 
 	let rawFeed = await EleventyFetch(url, {
 		duration: "1d",
@@ -171,7 +141,10 @@ const parseFeed = async (url, category) => {
 	});
 
 
-	let feed = await new RssParser().parseString(rawFeed);
+	let feed = await new RssParser({
+		timeout: 10000,
+	}).parseString(rawFeed);
+
 	let feedId = url;
 
 	return {
@@ -181,7 +154,6 @@ const parseFeed = async (url, category) => {
 		author: safeString(feed.author),
 		url: url,
 		id: feedId,
-		categories: [category],
 		items: feed.items.filter((item) => {
 			let date = new Date(item.pubDate);
 			return date > dateLimit;
@@ -200,27 +172,25 @@ const parseFeed = async (url, category) => {
 module.exports = async () => {
 	const feedSources = await getSources();
 	const feeds = {};
-	const categories = [];
+	const parseFeedPromises = [];
+	const feedSourcesFlat = feedSources.listFlat();
+	console.log(Object.keys(feedSourcesFlat));
 
-	for (const categorySource of feedSources) {
-		let category = categorySource.category;
-		categories.push(category);
-		for (const feed of categorySource.items) {
-			try {
-				if (!feeds[feed]) {
-					console.log(`Processing ${feed}`);
-					feeds[feed] = await parseFeed(feed, category);
-				} else {
-					console.log(feed);
-					feeds[feed].categories.push(category);
-				}
-			} catch (error) {
-				console.error(`Could not reach ${feed}`)
-			}
-		}
+	for (const feed of Object.keys(feedSourcesFlat)) {
+		const feedPromise = parseFeed(feed).then(parsedFeed => {
+			console.log(`Processing ${feed}`);
+			parsedFeed.categories = feedSourcesFlat[feed];
+			feeds[feed] = parsedFeed;
+		}).catch(error => {
+			console.error(`Could not reach ${feed}`);
+		});
+		parseFeedPromises.push(feedPromise);
 	}
+
+	await Promise.allSettled(parseFeedPromises);
+
 	return {
 		"all": Object.values(feeds),
-		"categories": categories,
+		"categories": Object.keys(feedSources.list()),
 	};
 };

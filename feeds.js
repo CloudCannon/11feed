@@ -74,17 +74,17 @@ const getSources = async () => {
 		let file = fs.readFileSync(feed);
 		let outlines = xmlParser.parse(file)['opml']['body']['outline'];
 		if (Array.isArray(outlines)) {
-			let category = 'misc';
+			let category = 'Misc';
 			for (let outline of outlines) {
 				let categoryFeeds = [];
-				category = 'misc';
+				category = 'Misc';
 				
 
 				// check if it's a single outline
 				if (outline['@_xmlUrl']) {
 					feeds.push({
 						category: category,
-						feeds: categoryFeeds
+						items: [outline['@_xmlUrl']]
 					})
 				// Check if it's a nested outline
 				} else if (outline.outline) {
@@ -129,6 +129,7 @@ const getSources = async () => {
 		if (category in deduplicatedFeeds) {
 			deduplicatedFeeds[category] = [...new Set([...deduplicatedFeeds[category], ...feedList['items']])];
 		} else {
+			console.log(feedList['items']);
 			deduplicatedFeeds[category] = feedList['items'];
 		}
 	});
@@ -207,10 +208,9 @@ module.exports = async () => {
 		for (const feed of categorySource.items) {
 			try {
 				if (!feeds[feed]) {
-					console.log(feed);
+					console.log(`Processing ${feed}`);
 					feeds[feed] = await parseFeed(feed, category);
 				} else {
-					console.log("*** NOT ***");
 					console.log(feed);
 					feeds[feed].categories.push(category);
 				}

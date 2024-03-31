@@ -419,6 +419,10 @@ iframe.contentIframe {
 	min-width: 100%;
 }
 
+.pagination {
+	margin-top: 1em;
+}
+
 .search-box {
 	margin-top: 1rem;
 }

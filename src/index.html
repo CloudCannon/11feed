@@ -1,16 +1,34 @@
 ---
+pagination:
+  data: collections.feedPosts
+  size: 100
+  alias: allPosts
+permalink: "/{% if pagination.pageNumber > 0 %}page-{{ pagination.pageNumber }}/{% endif %}"
 layout: base.html
 ---
 {% include "_header.html" %}
 <div class="wrapper">
 	<main>
-		{% for post in collections.posts %}
+		{% for post in allPosts %}
 			<article>
 				<h3 class="u-step-5">
-					<a href="{{ post.url }}">{{ post.data.title }}</a>
+					<a href="/posts/{{ post.link | slug }}/">{{ post.title }}</a>
 				</h3>
-				{% include "_summary.html", feedId:post.data.feedId feedTitle:post.data.feedTitle date:post.data.date %}
+				{% include "_summary.html", feedId:post.feed.id feedTitle:post.feed.title date:post.date %}
 			</article>
 		{% endfor %}
+
+		{% if pagination.href.previous or pagination.href.next %}
+			<div class="pagination">
+
+				{% if pagination.href.previous %}
+					<a href="{{ pagination.href.previous }}">Previous Page</a>
+				{% endif %}
+
+				{% if pagination.href.next %}
+					<a href="{{ pagination.href.next }}">Next Page</a>
+				{% endif %}
+			</div>
+		{% endif %}
 	</main>
 </div>

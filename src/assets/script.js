@@ -41,6 +41,8 @@ window.addEventListener('load', () => {
   document.getElementById("back").addEventListener("click", (e) => {
     if(document.referrer.indexOf(window.location.host) >= 0) {
       history.back();
+      e.preventDefault();
+      return false;
     }
   });
 });

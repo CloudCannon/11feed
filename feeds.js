@@ -174,7 +174,6 @@ module.exports = async () => {
 	const feeds = {};
 	const parseFeedPromises = [];
 	const feedSourcesFlat = feedSources.listFlat();
-	console.log(Object.keys(feedSourcesFlat));
 
 	for (const feed of Object.keys(feedSourcesFlat)) {
 		const feedPromise = parseFeed(feed).then(parsedFeed => {

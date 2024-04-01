@@ -3,6 +3,15 @@
 11feed is an open-source, self-hosted, minimal RSS reader built with the static 
 site generator <a href="https://www.11ty.dev/">11ty</a>.
 
+## Core Principles 
+
+* No ads, upsells, or feature bloat
+* Encourage the culture of blogging, sharing, and discovery through RSS.
+* Generate a purely static site that can be hosted publicly on any web server.
+* Keep features, dependencies, and the implementation to the bare essentials.
+* Provide a solid base for others to build on and customize for their own needs.
+* Emphasis on security.
+
 ## Quick Start
 
 1. **Clone the repository**
@@ -17,11 +26,11 @@ cd 11feed
 npm install
 ```
 
-3. **Configure your RSS feeds***
+3. **Configure your RSS feeds**
+
 **JSON Configuration**: Place a `.json` file with your feeds in `/src/_feeds/`:
 
 ```json
-// /src/_feeds/web.json
 {
   "category": "Web",
   "items": [
@@ -34,7 +43,6 @@ npm install
 **OPML Import**: Put your OPML export in `/src/_feeds/`:
 
 ```xml
-<!-- /src/_feeds/export.xml -->
 <?xml version="1.0" encoding="UTF-8"?>
 <opml version="2.0">
   <head>
@@ -50,6 +58,7 @@ npm install
 ```
 
 4. **Build**
+
 To build:
 ```sh
 npx @11ty/eleventy
@@ -61,6 +70,7 @@ npx @11ty/eleventy --serve
 ```
 
 5. **Deploy**
+
 Deploy your site to a static hosting provider. Each platform offers ways to schedule daily builds:
 
 * [CloudCannon](https://cloudcannon.com/documentation/articles/scheduling-your-builds-manually/)
@@ -74,15 +84,6 @@ Deploy your site to a static hosting provider. Each platform offers ways to sche
 * [11ty Documentation](https://www.11ty.dev/docs/) - Learn more about how to use 11ty.
 * [Explore RSS feeds in your neighbourhood](https://rss-is-dead.lol/) - Finds RSS feeds from people you follow on the Fediverse.
 * [List of frontend feeds](https://github.com/impressivewebs/frontend-feeds) - Another way todiscover new people to follow.
-
-## Core Principles 
-
-* No ads, upsells, or feature bloat
-* Encourage the culture of blogging, sharing, and discovery through RSS.
-* Generate a purely static site that can be hosted publicly on any web server.
-* Keep features, dependencies, and the implementation to the bare essentials.
-* Provide a solid base for others to build on and customize for their own needs.
-* Emphasis on security.
 
 ## Contributing
 

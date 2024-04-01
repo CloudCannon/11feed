@@ -64,7 +64,7 @@ site generator <a href="https://www.11ty.dev/">11ty</a>.
     npx @11ty/eleventy
     ```
 
-    To build and serve on localhost:8080:
+    To build and serve on `localhost:8080`:
     ```sh
     npx @11ty/eleventy --serve
     ```

@@ -52,6 +52,32 @@ const safeString = (v) => {
 	}
 };
 
+const processOutline = async (outline, categoryStore) => {
+	let category = 'Misc';
+	if (outline['@_xmlUrl']) {
+		categoryStore.add(category, outline['@_xmlUrl']);
+
+	// Check if it's a nested outline
+	} else if (outline.outline) {
+		const nestedOutlines = outline.outline;
+
+		if (outline['@_text']) {
+			category = outline['@_text'];
+		}
+		if (Array.isArray(nestedOutlines)) {
+			nestedOutlines.forEach(nestedOutline => {
+				if (nestedOutline['@_xmlUrl']) {
+					categoryStore.add(category, nestedOutline['@_xmlUrl']);
+				}
+			});
+		} else {
+			if (nestedOutlines['@_xmlUrl']) {
+				categoryStore.add(category, nestedOutlines['@_xmlUrl']);
+			}
+		}
+	}
+};
+
 const getSources = async () => {
 	console.log("Downloading RSS feeds...")
 
@@ -80,37 +106,10 @@ const getSources = async () => {
 		let outlines = xmlParser.parse(file)['opml']['body']['outline'];
 		if (Array.isArray(outlines)) {
 			for (let outline of outlines) {
-				let categoryFeeds = [];
-				let category = 'Misc';
-
-				// check if it's a single outline
-				if (outline['@_xmlUrl']) {
-					categoryStore.add(category, outline['@_xmlUrl']);
-
-				// Check if it's a nested outline
-				} else if (outline.outline) {
-					const nestedOutlines = outline.outline;
-
-					if (outline['@_text']) {
-						category = outline['@_text'];
-					}
-					if (Array.isArray(nestedOutlines)) {
-						nestedOutlines.forEach(nestedOutline => {
-							if (nestedOutline['@_xmlUrl']) {
-								categoryStore.add(category, nestedOutline['@_xmlUrl']);
-							}
-						});
-					} else {
-						if (nestedOutlines['@_xmlUrl']) {
-							categoryStore.add(category, nestedOutlines['@_xmlUrl']);
-						}
-					}
-				}
+				processOutline(outline, categoryStore);
 			}
 		} else {
-			if (outlines['@_xmlUrl']) {
-				categoryStore.add('Misc', outlines['@_xmlUrl']);
-			}
+			processOutline(outlines, categoryStore);
 		}
 	}
 

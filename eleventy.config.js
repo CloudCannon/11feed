@@ -3,8 +3,13 @@ const svgContents = require("eleventy-plugin-svg-contents");
 const util = require("node:util");
 const exec = util.promisify(require("node:child_process").exec);
 const { DateTime } = require("luxon");
+const path = require('path');
 
 module.exports = async function(eleventyConfig) {
+	const pagefind = await import(
+		"pagefind"
+	);
+
 	const md = new markdownIt({
 		html: true,
 	});
@@ -21,18 +26,36 @@ module.exports = async function(eleventyConfig) {
 		return DateTime.fromJSDate(dateObj).toLocaleString(DateTime.DATE_MED);
 	});
 
-	eleventyConfig.on("eleventy.after", async ({ dir }) => {
-		await exec(`npx pagefind --site=${dir.output} --output-subdir=./pagefind`);
-	});
-	let data = [];
-
-	await require('./feeds.js')().then(data => {
-		eleventyConfig.addCollection("feedPosts", (collection) => {
+	await require('./feeds.js')().then(async (data) => {
+		eleventyConfig.addCollection("feedPosts", async (collection) => {
+			const { index } = await pagefind.createIndex();
 			const feedData = data['all'];
 			let posts = [];
-			feedData.forEach(function(feed) {
-				feed.items.forEach(function(item) {
+			feedData.forEach(async (feed) => {
+				feed.items.forEach(async (item) => {
+
+					const { errors, file } = await index.addHTMLFile({
+						url: `/posts/${item.id}/`,
+						content: `<html lang='en'><body><h1 data-pagefind-filter="category:${feed.categories.join(', ')}">${item.title}</h1><main>${ md.render(item.content)}</main></body></html>`
+					});
+
+					console.log(errors);
+					console.log(file);
+
+					// await index.addCustomRecord({
+					// 	url: `/posts/${item.id}`,
+					// 	content: md.render(item.content),
+					// 	language: "en",
+					// 	meta: {
+					// 		title: item.title,
+					// 	},
+					// 	filters: {
+					// 		tags: feed.categories
+					// 	}
+					// });
+
 					posts.push({
+						id: item.id,
 						content: item.content,
 						title: item.title,
 						date: new Date(item.date),
@@ -48,6 +71,10 @@ module.exports = async function(eleventyConfig) {
 						}
 					});
 				});
+			});
+
+			const { errors } = await index.writeFiles({
+				outputPath: "./_site/pagefind"
 			});
 
 			// Remove duplicate posts and sort by date

@@ -1,9 +1,9 @@
 ---
 pagination:
   data: collections.feedPosts
-  size: 100
+  size: 50
   alias: allPosts
-permalink: "/{% if pagination.pageNumber > 0 %}page-{{ pagination.pageNumber }}/{% endif %}"
+permalink: "/{% if pagination.pageNumber > 0 %}all/{{ pagination.pageNumber }}/{% endif %}"
 layout: base.html
 ---
 {% include "_header.html" %}
@@ -12,7 +12,7 @@ layout: base.html
 		{% for post in allPosts %}
 			<article>
 				<h3 class="u-step-5">
-					<a href="/posts/{{ post.link | slug }}/">{{ post.title }}</a>
+					<a href="/posts/{{ post.id }}/">{{ post.title }}</a>
 				</h3>
 				{% include "_summary.html", feedId:post.feed.id feedTitle:post.feed.title date:post.date %}
 			</article>

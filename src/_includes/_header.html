@@ -3,7 +3,7 @@
 		<h1 class="u-step-4 logo">11Feed</h1>
 		<nav>
 			<ul>
-				<li><a href="/" {% if page.url == "/" %}class="active" {% endif %}>All</a></li>
+				<li><a href="/" {% if page.url == "/" or page.url contains "/all/" %}class="active" {% endif %}>All</a></li>
 				{% assign categories_length = collections.categories | size %}
 				{% if categories_length > 1 %}
 					{% for category in collections.categories %}

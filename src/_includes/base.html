@@ -4,6 +4,10 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<title>11Feed</title>
+		<meta name="robots" content="noindex">
+		{% if canonical %}
+			<link rel="canonical" href="{{ canonical }}" />
+		{% endif %}
 		<link rel="stylesheet" href="/assets/style.css">
 		<link rel="icon" href="/favicon.ico" type="image/x-icon">
 		<script src="/assets/script.js"></script>

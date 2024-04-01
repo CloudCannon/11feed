@@ -6,7 +6,7 @@
 		alias: "post",
 		addAllPagesToCollections: true
 	},
-	permalink: "/posts/{{ post.link | slug }}/",
+	permalink: "/posts/{{ post.id }}/",
 	tags: "posts",
 	layout: "base.html",
 	eleventyComputed: {
@@ -17,7 +17,8 @@
 		feedId: (data) => data.post.feed.id,
 		feedTitle: (data) => data.post.feed.title,
 		date: (data) => data.post.date,
-		categories: (data) => data.post.feed.categories
+		categories: (data) => data.post.feed.categories,
+		canonical: (data) => data.post.link
 	}
 }
 ---
@@ -30,8 +31,8 @@
 </div>
 
 <div class="wrapper">
-	<main data-pagefind-body>
-		<iframe scrolling="no" id="contentIframe" sandbox="allow-scripts allow-top-navigation-by-user-activation" class="contentIframe" width="100%" frameborder="0"></iframe>
+	<main>
+		<iframe scrolling="no" id="contentIframe" sandbox="allow-scripts allow-top-navigation-by-user-activation" class="contentIframe" id="contentIframe" width="100%" frameborder="0"></iframe>
 	</main>
 </div>
 <script type="text/javascript" src="/assets/iframe-resizer.js"></script>

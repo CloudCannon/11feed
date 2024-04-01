@@ -11,6 +11,7 @@ const sanitizeUrl = require("@braintree/sanitize-url").sanitizeUrl;
 const htmlEscaper = require('html-escaper');
 const { XMLParser } = require("fast-xml-parser");
 const CategoryStore = require("./category-store.js");
+const slugify = require('slugify');
 
 const turndownService = new TurndownService();
 turndownService.use(turndownPluginGfm.gfm);
@@ -58,7 +59,7 @@ const getSources = async () => {
 
 	// Create a "glob" of all feed json files
 	const feedFiles = await fastglob(
-		"./src/feeds/*.json", 
+		"./src/_feeds/*.json", 
 		{ caseSensitiveMatch: false }
 	);
 
@@ -70,7 +71,7 @@ const getSources = async () => {
 	}
 
 	const opmlFiles = await fastglob(
-		"./src/feeds/*.xml", 
+		"./src/_feeds/*.xml", 
 		{ caseSensitiveMatch: false }
 	);
 
@@ -145,7 +146,7 @@ const parseFeed = async (url) => {
 		timeout: 10000,
 	}).parseString(rawFeed);
 
-	let feedId = url;
+	let feedId = slugify(url);
 
 	return {
 		title: safeString(feed.title),
@@ -159,6 +160,7 @@ const parseFeed = async (url) => {
 			return date > dateLimit;
 		}).map((item) => {
 			return {
+				id: slugify(item.link),
 				title: safeString(item.title),
 				date: new Date(item.pubDate),
 				content: safeContent(item['content:encoded'] || item.content || item.description),

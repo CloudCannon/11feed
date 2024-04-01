@@ -51,7 +51,7 @@ site generator <a href="https://www.11ty.dev/">11ty</a>.
         <title>Feed List</title>
       </head>
       <body>
-        <outline text="Web" title="Web">
+        <outline text="Web">
           <outline type="rss" text="Zach Leatherman's Blog" xmlUrl="https://zachleat.com/web/feed/" />
           <outline type="rss" text="Smashing Magazine" xmlUrl="https://www.smashingmagazine.com/feed/" />
         </outline>
@@ -85,7 +85,7 @@ site generator <a href="https://www.11ty.dev/">11ty</a>.
 
 * [11ty Documentation](https://www.11ty.dev/docs/) - Learn more about how to use 11ty.
 * [Explore RSS feeds in your neighbourhood](https://rss-is-dead.lol/) - Finds RSS feeds from people you follow on the Fediverse.
-* [List of frontend feeds](https://github.com/impressivewebs/frontend-feeds) - Another way todiscover new people to follow.
+* [List of frontend feeds](https://github.com/impressivewebs/frontend-feeds) - Another way to discover new people to follow.
 
 ## Contributing
 

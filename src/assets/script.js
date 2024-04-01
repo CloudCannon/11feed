@@ -25,10 +25,8 @@ toggleDarkMode(localStorage.getItem("dark-mode") == "true");
 // for older browsers define the function using the function keyword.
 useDark.addListener((evt) => toggleDarkMode(evt.matches));
 
-
-
-// Toggles the "dark-mode" class on click and sets localStorage state
 window.addEventListener('load', () => {
+	// Toggles the "dark-mode" class on click and sets localStorage state
 	const colorSchemeButton = document.querySelector(".toggle-color-scheme");
 	colorSchemeButton.addEventListener("click", () => {
 		darkModeState = !darkModeState;
@@ -38,6 +36,7 @@ window.addEventListener('load', () => {
 		document.documentElement.dispatchEvent(colorSchemeEvent);
 	});
 
+	// Logic for back button
 	document.getElementById("back").addEventListener("click", (e) => {
 		const navigateToFallbackUrl = () => {
 			const fallbackUrl = document.getElementById("back").getAttribute('href');

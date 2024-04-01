@@ -35,16 +35,15 @@
 		<iframe scrolling="no" id="contentIframe" sandbox="allow-scripts allow-top-navigation-by-user-activation" class="contentIframe" id="contentIframe" width="100%" frameborder="0"></iframe>
 	</main>
 </div>
-<script type="text/javascript" src="/assets/iframe-resizer.js"></script>
+<script type="text/javascript" src="/assets/iframe.js"></script>
 <script>
-	function rerenderIframe() {
-		let postContent = {{ post.content | markdownify | json }};
-		setiFrameContent(postContent, document.getElementsByTagName('html')[0].classList.contains('dark-mode'), 'contentIframe');
-	}
-
+	let postContent = {{ post.content | markdownify | json }};
 	document.documentElement.addEventListener("trigger-color-scheme", function() {
-		rerenderIframe();
+		rerenderIframe(postContent);
 	}, false);
 
-	rerenderIframe();
+
+	window.addEventListener('load', () => {
+		rerenderIframe(postContent);
+	});
 </script>

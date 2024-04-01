@@ -16,68 +16,68 @@ site generator <a href="https://www.11ty.dev/">11ty</a>.
 
 1. **Clone the repository**
 
-```sh
-git clone https://github.com/cloudcannon/11feed.git
-cd 11feed
-```
+    ```sh
+    git clone https://github.com/cloudcannon/11feed.git
+    cd 11feed
+    ```
 
 2. **Install dependencies**
-```sh
-npm install
-```
+    ```sh
+    npm install
+    ```
 
 3. **Configure your RSS feeds**
 
-**JSON Configuration**: Place a `.json` file with your feeds in `/src/_feeds/`:
+    **JSON Configuration**: Place a `.json` file with your feeds in `./src/_feeds/`:
 
-```json
-{
-  "category": "Web",
-  "items": [
-    "https://zachleat.com/web/feed/",
-    "https://www.smashingmagazine.com/feed/"
-  ]
-}
-```
+    ```json
+    {
+      "category": "Web",
+      "items": [
+        "https://zachleat.com/web/feed/",
+        "https://www.smashingmagazine.com/feed/"
+      ]
+    }
+    ```
 
-**OPML Import**: Put your OPML export in `/src/_feeds/`:
+    **OPML Import**: Put your OPML export in `./src/_feeds/`:
 
-```xml
-<?xml version="1.0" encoding="UTF-8"?>
-<opml version="2.0">
-  <head>
-    <title>Feed List</title>
-  </head>
-  <body>
-    <outline text="Web" title="Web">
-      <outline type="rss" text="Zach Leatherman's Blog" xmlUrl="https://zachleat.com/web/feed/" />
-      <outline type="rss" text="Smashing Magazine" xmlUrl="https://www.smashingmagazine.com/feed/" />
-    </outline>
-  </body>
-</opml>
-```
+    ```xml
+    <?xml version="1.0" encoding="UTF-8"?>
+    <opml version="2.0">
+      <head>
+        <title>Feed List</title>
+      </head>
+      <body>
+        <outline text="Web" title="Web">
+          <outline type="rss" text="Zach Leatherman's Blog" xmlUrl="https://zachleat.com/web/feed/" />
+          <outline type="rss" text="Smashing Magazine" xmlUrl="https://www.smashingmagazine.com/feed/" />
+        </outline>
+      </body>
+    </opml>
+    ```
 
 4. **Build**
 
-To build:
-```sh
-npx @11ty/eleventy
-```
+    To build:
+    ```sh
+    npx @11ty/eleventy
+    ```
 
-To build and serve on localhost:8080:
-```sh
-npx @11ty/eleventy --serve
-```
+    To build and serve on localhost:8080:
+    ```sh
+    npx @11ty/eleventy --serve
+    ```
 
 5. **Deploy**
 
-Deploy your site to a static hosting provider. Each platform offers ways to schedule daily builds:
+    Deploy your site to a static hosting provider. Each platform offers ways to schedule daily builds:
 
-* [CloudCannon](https://cloudcannon.com/documentation/articles/scheduling-your-builds-manually/)
-* [Netlify](https://docs.netlify.com/functions/scheduled-functions/)
-* [Vercel](https://vercel.com/guides/how-to-setup-cron-jobs-on-vercel)
-* [Cloudflare pages](https://developers.cloudflare.com/pages/configuration/deploy-hooks/)
-* [GitHub Pages](https://danielsaidi.com/blog/2022/05/11/schedule-github-pages-rebuild-with-github-actions)
+    * [CloudCannon](https://cloudcannon.com/documentation/articles/scheduling-your-builds-manually/)
+    * [Netlify](https://docs.netlify.com/functions/scheduled-functions/)
+    * [Vercel](https://vercel.com/guides/how-to-setup-cron-jobs-on-vercel)
+    * [Cloudflare pages](https://developers.cloudflare.com/pages/configuration/deploy-hooks/)
+    * [GitHub Pages](https://danielsaidi.com/blog/2022/05/11/schedule-github-pages-rebuild-with-github-actions)
 
 ## Useful Resources
 

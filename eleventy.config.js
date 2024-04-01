@@ -39,21 +39,6 @@ module.exports = async function(eleventyConfig) {
 						content: `<html lang='en'><body><h1 data-pagefind-filter="category:${feed.categories.join(', ')}">${item.title}</h1><main>${ md.render(item.content)}</main></body></html>`
 					});
 
-					console.log(errors);
-					console.log(file);
-
-					// await index.addCustomRecord({
-					// 	url: `/posts/${item.id}`,
-					// 	content: md.render(item.content),
-					// 	language: "en",
-					// 	meta: {
-					// 		title: item.title,
-					// 	},
-					// 	filters: {
-					// 		tags: feed.categories
-					// 	}
-					// });
-
 					posts.push({
 						id: item.id,
 						content: item.content,

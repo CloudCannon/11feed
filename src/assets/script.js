@@ -35,21 +35,4 @@ window.addEventListener('load', () => {
 		setDarkModeLocalStorage(darkModeState);
 		document.documentElement.dispatchEvent(colorSchemeEvent);
 	});
-
-	// Logic for back button
-	document.getElementById("back").addEventListener("click", (e) => {
-		const navigateToFallbackUrl = () => {
-			const fallbackUrl = document.getElementById("back").getAttribute('href');
-			window.location.href = fallbackUrl;
-		};
-	
-		if(document.referrer.indexOf(window.location.host) >= 0) {
-			history.back();
-			e.preventDefault();
-			setTimeout(navigateToFallbackUrl, 100);
-			return false;
-		} else {
-			navigateToFallbackUrl();
-		}
-	});
 });

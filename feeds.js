@@ -44,7 +44,9 @@ const safeString = (v) => {
 		return null;
 	} else {
 		try {
-			return htmlEscaper.escape(v)
+			v = htmlEscaper.unescape(v);
+			v = v.replaceAll('&#8217;', '’');
+			return htmlEscaper.escape(v);
 		} catch(error) {
 			console.error(`Could not parse ${v}`);
 			return "";
@@ -160,7 +162,7 @@ const parseFeed = async (url) => {
 		}).map((item) => {
 			return {
 				id: slugify(item.link),
-				title: safeString(item.title),
+				title: safeString((item.title || item.description || item.summary || item['content:encoded'] || item.content || item.link).replace(/(<([^>]+)>)/gi, "")).substring(0, 50),
 				date: new Date(item.pubDate),
 				content: safeContent(item['content:encoded'] || item.content || item.description),
 				link: sanitizeUrl(item.link),
@@ -182,6 +184,7 @@ module.exports = async () => {
 			parsedFeed.categories = feedSourcesFlat[feed];
 			feeds[feed] = parsedFeed;
 		}).catch(error => {
+			console.error(error);
 			console.error(`Could not reach ${feed}`);
 		});
 		parseFeedPromises.push(feedPromise);

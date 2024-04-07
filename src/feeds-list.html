@@ -11,7 +11,7 @@ layout: base.html
 			<h3>{{ category[0] }}</h3>
 			<ul>
 			{% for feed in category[1] %}
-				<li><h4><a href="/feeds/{{ feed.id }}">{{ feed.title }}</a></h4> 
+				<li><h4><a href="/feeds/{{ feed.id }}/">{{ feed.title }}</a></h4> 
 					<p>
 						<em>
 							<a href="{{ feed.url}}">Feed</a>

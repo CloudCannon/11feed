@@ -12,11 +12,9 @@ if (
 	useDark.media === "not all" ||
 	useDark.matches === true
 ) {
-	console.log("dark");
 	document.documentElement.classList.toggle("dark-mode", true);
 	toggleDarkMode(true);
 } else {
-	console.log("not dark");
 	document.documentElement.classList.toggle("dark-mode", false);
 	toggleDarkMode(false);
 }
@@ -31,7 +29,6 @@ const colorSchemeEvent = new Event("trigger-color-scheme");
 
 // Toggles the "dark-mode" class
 function toggleDarkMode(state) {
-	console.log(state);
 	document.documentElement.classList.toggle("dark-mode", state);
 	darkModeState = state;
 	setDarkModeLocalStorage(darkModeState);

@@ -1,0 +1,35 @@
+source: /src
+collections_config:
+  pages:
+    path: ''
+    name: Pages
+    icon: work_outline
+    output: false
+    description: ''
+    _editables:
+    _inputs:
+    _select_data:
+    _structures:
+    disable_add: false
+    disable_add_folder: false
+    disable_file_actions: false
+    schemas:
+  feeds:
+    path: _feeds
+    name: Feeds
+    icon: fence
+    output: false
+    description: ''
+    _editables:
+    _inputs:
+    _select_data:
+    _structures:
+    disable_add: false
+    disable_add_folder: false
+    disable_file_actions: false
+    schemas:
+timezone: America/Los_Angeles
+markdown:
+  engine: commonmark
+  options:
+    html: true

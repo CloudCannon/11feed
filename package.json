@@ -10,7 +10,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@11ty/eleventy": "3.0.0-alpha.5"
+    "@11ty/eleventy": "3.0.0-alpha.10"
   },
   "dependencies": {
     "@11ty/eleventy-fetch": "^4.0.1",
